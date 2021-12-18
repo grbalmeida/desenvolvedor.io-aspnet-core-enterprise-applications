@@ -33,18 +33,10 @@ namespace NSE.WebApp.MVC.Controllers
         {
             if (!ModelState.IsValid) return View(usuarioRegistro);
 
-            // API - Registro
-
             var resposta = await _autenticacaoService.Registro(usuarioRegistro);
 
             if (ResponsePossuiErros(resposta.ResponseResult)) return View(usuarioRegistro);
 
-            //if (false)
-            //{
-            //    return View(usuarioRegistro);
-            //}
-
-            // Realizar login na APP
             await RealizarLogin(resposta);
 
             return RedirectToAction("Index", "Home");
@@ -52,29 +44,29 @@ namespace NSE.WebApp.MVC.Controllers
 
         [HttpGet]
         [Route("login")]
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login(UsuarioLogin usuarioLogin)
+        public async Task<IActionResult> Login(UsuarioLogin usuarioLogin, string returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
+
             if (!ModelState.IsValid) return View(usuarioLogin);
 
-            // API - Login
             var resposta = await _autenticacaoService.Login(usuarioLogin);
 
             if (ResponsePossuiErros(resposta.ResponseResult)) return View(usuarioLogin);
 
-            // if (false) return View(usuarioLogin);
-
             await RealizarLogin(resposta);
 
-            // Realizar login na APP
+            if (string.IsNullOrEmpty(returnUrl)) return RedirectToAction("Index", "Home");
 
-            return RedirectToAction("Index", "Home");
+            return LocalRedirect(returnUrl);
         }
 
         [HttpGet]
