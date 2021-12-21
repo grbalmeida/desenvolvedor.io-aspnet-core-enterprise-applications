@@ -40,7 +40,7 @@ namespace NSE.WebApp.MVC.Extensions
 
         public string ObterUserToken()
         {
-            return EstaAutenticado() ? _accessor.HttpContext.User.GetUserEmail() : "";
+            return EstaAutenticado() ? _accessor.HttpContext.User.GetUserToken() : "";
         }
 
         public bool EstaAutenticado()
