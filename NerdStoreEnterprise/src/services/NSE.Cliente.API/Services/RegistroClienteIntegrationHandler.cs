@@ -13,7 +13,7 @@ namespace NSE.Clientes.API.Services
 {
     public class RegistroClienteIntegrationHandler : BackgroundService
     {
-        private IMessageBus _bus;
+        private readonly IMessageBus _bus;
         private readonly IServiceProvider _serviceProvider;
 
         public RegistroClienteIntegrationHandler(
@@ -26,12 +26,12 @@ namespace NSE.Clientes.API.Services
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _bus.RespondAsync<UsuarioRegistradoIntegrationEvent, ResponseMessage>(async request => new ResponseMessage(await RegistrarCliente(request)));
+            _bus.RespondAsync<UsuarioRegistradoIntegrationEvent, ResponseMessage>(async request => await RegistrarCliente(request));
 
             return Task.CompletedTask;
         }
 
-        private async Task<ValidationResult> RegistrarCliente(UsuarioRegistradoIntegrationEvent message)
+        private async Task<ResponseMessage> RegistrarCliente(UsuarioRegistradoIntegrationEvent message)
         {
             var clienteCommand = new RegistrarClienteCommand(message.Id, message.Nome, message.Email, message.Cpf);
             ValidationResult sucesso;
@@ -43,7 +43,7 @@ namespace NSE.Clientes.API.Services
                 sucesso = await mediator.EnviarComando(clienteCommand);
             }
 
-            return sucesso;
+            return new ResponseMessage(sucesso);
         }
     }
 }
