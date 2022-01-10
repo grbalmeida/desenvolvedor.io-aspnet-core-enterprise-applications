@@ -1,10 +1,10 @@
-﻿using System;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using System;
 
-namespace NSE.Clientes.API.Configuration
+namespace NSE.Carrinho.API.Configuration
 {
     public static class SwaggerConfig
     {
@@ -14,7 +14,7 @@ namespace NSE.Clientes.API.Configuration
             {
                 c.SwaggerDoc("v1", new OpenApiInfo()
                 {
-                    Title = "NerdStore Enterprise Clientes API",
+                    Title = "NerdStore Enterprise Carrinho API",
                     Description = "Esta API faz parte do curso ASP.NET Core Enterprise Applications.",
                     Contact = new OpenApiContact() { Name = "Eduardo Pires", Email = "contato@desenvolvedor.io" },
                     License = new OpenApiLicense() { Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT") }
@@ -23,7 +23,7 @@ namespace NSE.Clientes.API.Configuration
                 c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
                 {
                     Description = "Insira o token JWT desta maneira: Bearer {seu token}",
-                    Name = "Authorization",
+                    Name = "Authrozization",
                     Scheme = JwtBearerDefaults.AuthenticationScheme,
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
@@ -44,7 +44,6 @@ namespace NSE.Clientes.API.Configuration
                         new string[] {}
                     }
                 });
-
             });
         }
 
