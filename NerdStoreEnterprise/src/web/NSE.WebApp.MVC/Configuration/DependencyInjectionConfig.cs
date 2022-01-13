@@ -19,12 +19,25 @@ namespace NSE.WebApp.MVC.Configuration
         public static void RegisterServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<IValidationAttributeAdapterProvider, CpfValidationAttributeAdapterProvider>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IAspNetUser, AspNetUser>();
+
+            #region HttpServices
 
             services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
 
-            services.AddHttpClient<IAutenticacaoService, AutenticacaoService>();
+            services.AddHttpClient<IAutenticacaoService, AutenticacaoService>()
+                .AddPolicyHandler(PollyExtensions.EsperarTentar())
+                .AddTransientHttpErrorPolicy(
+                    p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
 
             services.AddHttpClient<ICatalogoService, CatalogoService>()
+                .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
+                .AddPolicyHandler(PollyExtensions.EsperarTentar())
+                .AddTransientHttpErrorPolicy(
+                    p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
+
+            services.AddHttpClient<ICarrinhoService, CarrinhoService>()
                 .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
                 .AddPolicyHandler(PollyExtensions.EsperarTentar())
                 .AddTransientHttpErrorPolicy(
@@ -36,17 +49,12 @@ namespace NSE.WebApp.MVC.Configuration
             // Se 5 usuários tiverem 1 erro cada, a aplicação entra em Circuit Breaker
             // 5 tentativas consecutivas, caso alguma ocorra com sucesso, a máquina de estado é "resetada"
 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<IAspNetUser, AspNetUser>();
+            #endregion
 
-            //services.AddHttpClient("Refit", options =>
-            //    {
-            //        options.BaseAddress = new Uri(configuration.GetSection("CatalogoUrl").Value);
-            //    })
-            //    .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
-            //    .AddTypedClient(Refit.RestService.For<ICatalogoServiceRefit>);
         }
     }
+
+    #region PollyExtensions
 
     public class PollyExtensions
     {
@@ -70,4 +78,6 @@ namespace NSE.WebApp.MVC.Configuration
             return retry;
         }
     }
+
+    #endregion
 }
