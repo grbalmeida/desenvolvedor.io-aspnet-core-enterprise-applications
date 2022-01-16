@@ -40,7 +40,7 @@
                                                         </div>
                                                         <figcaption class="info">
                                                             <a asp-controller="Catalogo" asp-action="ProdutoDetalhe" asp-route-id="@item.ProdutoId"><h6 style="padding-top: 10px" class="title text-dark">@item.Nome</h6></a>
-                                                            <p class="text-muted small">@item.Quantidade</p>
+                                                            <p class="text-muted small">@this.UnidadesPorProduto(item.Quantidade)</p>
                                                         </figcaption>
                                                     </figure>
                                                 </td>
@@ -57,7 +57,9 @@
 
                                                         <div class="text-left">
                                                             <select id="Quantidade" name="Quantidade" style="width: 80px" class="form-control">
-                                                                <option>1</option>
+                                                                @{
+                                                                    @Html.Raw(this.SelectOptionsPorQuantidade(5, item.Quantidade))
+                                                                }
                                                             </select>
                                                         </div>
 
@@ -92,7 +94,7 @@
                             </table>
 
                             <div class="card-body border-top">
-                                <a asp-controller="Pedido" asp-action="EnderecoEntrega" class="btn btn-primary float-md-right"> Finalizar Compra <i class="fa fa-chevron-right"></i> </a>
+                                <a href="#" class="btn btn-primary float-md-right"> Finalizar Compra <i class="fa fa-chevron-right"></i> </a>
                                 <a asp-controller="Catalogo" asp-action="Index" class="btn btn-light"> <i class="fa fa-chevron-left"></i> Continuar Comprando </a>
                             </div>
                         </div>
@@ -100,8 +102,31 @@
 
                     </main>
                     <aside class="col-md-3">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label>Possui um Cupom?</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="" placeholder="Cupom Desconto">
+                                            <span class="input-group-append">
+                                                <button class="btn btn-primary">Aplicar</button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                         <div class="card">
                             <div class="card-body">
+                                <dl class="dlist-align">
+                                    <dt>Valor Total:</dt>
+                                    <dd class="text-right">@this.FormatoMoeda(Model.ValorTotal)</dd>
+                                </dl>
+                                <dl class="dlist-align">
+                                    <dt>Desconto:</dt>
+                                    <dd class="text-right">R$ 0,00</dd>
+                                </dl>
                                 <dl class="dlist-align">
                                     <dt>Total:</dt>
                                     <dd class="text-right  h5">
@@ -110,7 +135,7 @@
                                 </dl>
                                 <hr>
                                 <p class="text-center mb-3">
-                                    <img src="~/images/misc/payments.png" height="26">
+                                    <img src="images/misc/payments.png" height="26">
                                 </p>
 
                             </div>
@@ -158,7 +183,7 @@
                             </svg>
                             <br /><br />
                             <h4>Seu carrinho está vazio</h4>
-                            <h5>Vá para a <a asp-controller="Catalogo">página inicial</a> e confira nossos carrinhos. <br />Quando encontrar um que goste clique no botão adicionar ao carrinho ;)</h5>
+                            <h5>Vá para a <a asp-controller="Catalogo">página inicial</a> e confira nossos produtos. <br />Quando encontrar um que goste clique no botão adicionar ao carrinho ;)</h5>
                         </div>
                     </div>
                 </div>
