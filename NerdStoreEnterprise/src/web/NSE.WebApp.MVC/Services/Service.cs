@@ -1,5 +1,5 @@
-﻿using NSE.WebApp.MVC.Extensions;
-using NSE.WebApp.MVC.Models;
+﻿using NSE.Core.Communication;
+using NSE.WebApp.MVC.Extensions;
 using System.Net;
 using System.Net.Http;
 using System.Text;
