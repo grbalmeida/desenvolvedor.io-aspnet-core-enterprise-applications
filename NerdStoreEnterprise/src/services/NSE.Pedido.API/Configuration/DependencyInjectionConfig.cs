@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using NSE.Core.Mediator;
+using NSE.Pedidos.API.Application.Queries;
 using NSE.Pedidos.Domain;
 using NSE.Pedidos.Infra.Data;
 using NSE.Pedidos.Infra.Data.Repository;
@@ -22,6 +23,7 @@ namespace NSE.Pedidos.API.Configuration
 
             // Application
             services.AddScoped<IMediatorHandler, MediatorHandler>();
+            services.AddScoped<IVoucherQueries, VoucherQueries>();
 
             // Data
             services.AddScoped<IVoucherRepository, VoucherRepository>();
