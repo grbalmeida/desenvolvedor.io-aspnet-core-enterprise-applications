@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20220124141543_Voucher.cs" />
+    <Compile Remove="Migrations\20220124141543_Voucher.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="3.1.4" />
