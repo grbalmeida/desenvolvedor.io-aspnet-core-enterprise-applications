@@ -1,7 +1,7 @@
 ﻿using NSE.Core.DomainObjects;
 using System;
 
-namespace NSE.Pedidos.Domain.Pedidos
+namespace NSE.Pedidos.Domain
 {
     public class PedidoItem : Entity
     {

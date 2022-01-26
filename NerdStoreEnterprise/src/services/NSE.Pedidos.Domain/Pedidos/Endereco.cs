@@ -1,4 +1,4 @@
-﻿namespace NSE.Pedidos.Domain.Pedidos
+﻿namespace NSE.Pedidos.Domain
 {
     public class Endereco
     {

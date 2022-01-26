@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NSE.Pedidos.Domain.Pedidos
+namespace NSE.Pedidos.Domain
 {
     public class Pedido : Entity, IAggregrateRoot
     {

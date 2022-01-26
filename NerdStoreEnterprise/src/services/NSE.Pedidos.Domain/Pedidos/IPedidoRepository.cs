@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace NSE.Pedidos.Domain.Pedidos
+namespace NSE.Pedidos.Domain
 {
     public interface IPedidoRepository : IRepository<Pedido>
     {
