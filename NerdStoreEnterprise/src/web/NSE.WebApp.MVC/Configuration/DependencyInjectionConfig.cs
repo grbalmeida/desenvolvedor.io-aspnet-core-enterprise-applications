@@ -42,6 +42,12 @@ namespace NSE.WebApp.MVC.Configuration
                 .AddTransientHttpErrorPolicy(
                     p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
 
+            services.AddHttpClient<IClienteService, ClienteService>()
+                .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
+                .AddPolicyHandler(PollyExtensions.EsperarTentar())
+                .AddTransientHttpErrorPolicy(
+                    p => p.CircuitBreakerAsync(5, TimeSpan.FromSeconds(30)));
+
             // Número máximo de tentativas = 5
             // Quando esse número for alcançado, a aplicação espera 30 segundos antes de realizar uma nova tentativa
             // É uma máquina de estado que vale para todas as conexões
