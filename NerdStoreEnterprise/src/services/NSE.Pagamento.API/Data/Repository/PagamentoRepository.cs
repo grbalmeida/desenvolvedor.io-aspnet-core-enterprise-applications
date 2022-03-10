@@ -12,7 +12,7 @@ namespace NSE.Pagamentos.API.Data.Repository
             _context = context;
         }
 
-        public IUnitOfWork UnitOfWork => throw new System.NotImplementedException();
+        public IUnitOfWork UnitOfWork => _context;
 
         public void AdicionarPagamento(Pagamento pagamento)
         {
