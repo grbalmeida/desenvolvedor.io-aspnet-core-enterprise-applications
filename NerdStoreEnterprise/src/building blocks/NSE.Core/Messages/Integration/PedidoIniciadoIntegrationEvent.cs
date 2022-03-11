@@ -4,14 +4,14 @@ namespace NSE.Core.Messages.Integration
 {
     public class PedidoIniciadoIntegrationEvent : IntegrationEvent
     {
-        public Guid ClienteId { get; private set; }
-        public Guid PedidoId { get; private set; }
-        public int TipoPagamento { get; private set; }
-        public decimal Valor { get; private set; }
+        public Guid ClienteId { get; set; }
+        public Guid PedidoId { get; set; }
+        public int TipoPagamento { get; set; }
+        public decimal Valor { get; set; }
         
-        public string NomeCartao { get; private set; }
-        public string NumeroCartao { get; private set; }
-        public string MesAnoVencimento { get; private set; }
-        public string CVV { get; private set; }
+        public string NomeCartao { get; set; }
+        public string NumeroCartao { get; set; }
+        public string MesAnoVencimento { get; set; }
+        public string CVV { get; set; }
     }
 }
