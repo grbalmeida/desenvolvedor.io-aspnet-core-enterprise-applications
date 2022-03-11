@@ -35,9 +35,7 @@ namespace NSE.Bff.Compras.Services
     
         public async Task<IEnumerable<ItemProdutoDTO>> ObterItens(IEnumerable<Guid> ids)
         {
-            var idsRequest = string.Join(",", ids);
-
-            var response = await _httpClient.GetAsync($"/catalogo/produtos/lista/{idsRequest}");
+            var response = await _httpClient.PostAsync($"/catalogo/produtos/lista", ObterConteudo(ids));
 
             TratarErrosResponse(response);
 

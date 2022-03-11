@@ -33,10 +33,11 @@ namespace NSE.Catalogo.API.Controllers
             return await _produtoRepository.ObterPorId(id);
         }
     
-        [HttpGet("catalogo/produtos/lista/{ids}")]
-        public async Task<IEnumerable<Produto>> ObterProdutosPorId(string ids)
+        [HttpPost("catalogo/produtos/lista")]
+        public async Task<IEnumerable<Produto>> ObterProdutosPorId([FromBody]IEnumerable<Guid> ids)
         {
-            return await _produtoRepository.ObterProdutosPorId(ids);
+            var idsRequest = string.Join(",", ids);
+            return await _produtoRepository.ObterProdutosPorId(idsRequest);
         }
     }
 }
