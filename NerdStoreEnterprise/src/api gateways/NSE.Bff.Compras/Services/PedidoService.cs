@@ -2,6 +2,7 @@
 using NSE.Bff.Compras.Extensions;
 using NSE.Bff.Compras.Models;
 using NSE.Core.Communication;
+using NSE.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -14,7 +15,7 @@ namespace NSE.Bff.Compras.Services
     {
         Task<ResponseResult> FinalizarPedido(PedidoDTO pedido);
         Task<PedidoDTO> ObterUltimoPedido();
-        Task<IEnumerable<PedidoDTO>> ObterListaPorClienteId();
+        Task<PagedResult<PedidoDTO>> ObterListaPorClienteId(int pageSize, int pageIndex);
 
         Task<VoucherDTO> ObterVoucherPorCodigo(string codigo);
     }
@@ -51,15 +52,15 @@ namespace NSE.Bff.Compras.Services
             return await DeserializarObjetoResponse<PedidoDTO>(response);
         }
 
-        public async Task<IEnumerable<PedidoDTO>> ObterListaPorClienteId()
+        public async Task<PagedResult<PedidoDTO>> ObterListaPorClienteId(int pageSize, int pageIndex)
         {
-            var response = await _httpClient.GetAsync("/pedido/lista-cliente");
+            var response = await _httpClient.GetAsync($"/pedido/lista-cliente?ps={pageSize}&page={pageIndex}");
 
             if (response.StatusCode == HttpStatusCode.NotFound) return null;
 
             TratarErrosResponse(response);
 
-            return await DeserializarObjetoResponse<IEnumerable<PedidoDTO>>(response);
+            return await DeserializarObjetoResponse<PagedResult<PedidoDTO>>(response);
         }
 
         public async Task<VoucherDTO> ObterVoucherPorCodigo(string codigo)

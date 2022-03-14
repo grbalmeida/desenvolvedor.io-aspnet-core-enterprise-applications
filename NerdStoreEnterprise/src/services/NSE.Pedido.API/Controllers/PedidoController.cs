@@ -41,9 +41,9 @@ namespace NSE.Pedidos.API.Controllers
         }
 
         [HttpGet("pedido/lista-cliente")]
-        public async Task<IActionResult> ListaPorCliente()
+        public async Task<IActionResult> ListaPorCliente([FromQuery] int ps = 8, [FromQuery] int page = 1)
         {
-            var pedidos = await _pedidoQueries.ObterListaPorClienteId(_user.ObterUserId());
+            var pedidos = await _pedidoQueries.ObterListaPorClienteId(_user.ObterUserId(), page, ps);
 
             return pedidos == null ? NotFound() : CustomResponse(pedidos);
         }

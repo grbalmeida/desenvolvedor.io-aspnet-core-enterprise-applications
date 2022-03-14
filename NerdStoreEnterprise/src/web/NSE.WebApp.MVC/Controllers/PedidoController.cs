@@ -70,9 +70,12 @@ namespace NSE.WebApp.MVC.Controllers
         }
     
         [HttpGet("meus-pedidos")]
-        public async Task<IActionResult> MeusPedidos()
+        public async Task<IActionResult> MeusPedidos([FromQuery] int ps = 8, [FromQuery] int page = 1)
         {
-            return View(await _comprasBffService.ObterListaPorClienteId());
+            var pedidos = await _comprasBffService.ObterListaPorClienteId(ps, page);
+            pedidos.ReferenceAction = nameof(MeusPedidos);
+
+            return View(pedidos);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace NSE.Catalogo.API.Models
+namespace NSE.Core.Models
 {
     public class PagedResult<T> where T : class
     {

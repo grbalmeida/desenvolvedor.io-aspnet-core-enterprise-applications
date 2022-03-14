@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NSE.Core.Data;
+using NSE.Core.Models;
 using NSE.Pedidos.Domain;
 using System;
-using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,13 +27,26 @@ namespace NSE.Pedidos.Infra.Data.Repository
             return await _context.Pedidos.FindAsync(id);
         }
 
-        public async Task<IEnumerable<Pedido>> ObterListaPorClienteId(Guid clienteId)
+        public async Task<PagedResult<Pedido>> ObterListaPorClienteId(Guid clienteId, int pageIndex, int pageSize)
         {
-            return await _context.Pedidos
+            var pedidos = await _context.Pedidos
                 .Include(p => p.PedidoItems)
                 .AsNoTracking()
                 .Where(p => p.ClienteId == clienteId)
+                .OrderByDescending(p => p.Codigo)
+                .Skip(pageSize * (pageIndex - 1))
+                .Take(pageSize)
                 .ToListAsync();
+
+            var totalResults = await _context.Pedidos.CountAsync(p => p.ClienteId == clienteId);
+
+            return new PagedResult<Pedido>
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalResults = totalResults,
+                List = pedidos
+            };
         }
 
         public void Adicionar(Pedido pedido)

@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using NSE.Core.Models;
 using NSE.Pedidos.API.Application.DTO;
 using NSE.Pedidos.Domain;
 using System;
@@ -11,7 +12,7 @@ namespace NSE.Pedidos.API.Application.Queries
     public interface IPedidoQueries
     {
         Task<PedidoDTO> ObterUltimoPedido(Guid clienteId);
-        Task<IEnumerable<PedidoDTO>> ObterListaPorClienteId(Guid clienteId);
+        Task<PagedResult<PedidoDTO>> ObterListaPorClienteId(Guid clienteId, int pageIndex, int pageSize);
         Task<PedidoDTO> ObterPedidosAutorizados();
     }
 
@@ -43,11 +44,17 @@ namespace NSE.Pedidos.API.Application.Queries
             return MapearPedido(pedido);
         }
 
-        public async Task<IEnumerable<PedidoDTO>> ObterListaPorClienteId(Guid clienteId)
+        public async Task<PagedResult<PedidoDTO>> ObterListaPorClienteId(Guid clienteId, int pageIndex, int pageSize)
         {
-            var pedidos = await _pedidoRepository.ObterListaPorClienteId(clienteId);
+            var pedidos = await _pedidoRepository.ObterListaPorClienteId(clienteId, pageIndex, pageSize);
 
-            return pedidos.Select(PedidoDTO.ParaPedidoDTO);
+            return new PagedResult<PedidoDTO>
+            {
+                PageIndex = pedidos.PageIndex,
+                PageSize = pedidos.PageSize,
+                TotalResults = pedidos.TotalResults,
+                List = pedidos.List.Select(p => PedidoDTO.ParaPedidoDTO(p))
+            };
         }
 
         public async Task<PedidoDTO> ObterPedidosAutorizados()

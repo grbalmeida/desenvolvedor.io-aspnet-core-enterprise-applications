@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Options;
 using NSE.Core.Communication;
+using NSE.Core.Models;
 using NSE.WebApp.MVC.Extensions;
 using NSE.WebApp.MVC.Models;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -21,7 +21,7 @@ namespace NSE.WebApp.MVC.Services
         // Pedido
         Task<ResponseResult> FinalizarPedido(PedidoTransacaoViewModel pedidoTransacao);
         Task<PedidoViewModel> ObterUltimoPedido();
-        Task<IEnumerable<PedidoViewModel>> ObterListaPorClienteId();
+        Task<PagedViewModel<PedidoViewModel>> ObterListaPorClienteId(int pageSize, int pageIndex);
         PedidoTransacaoViewModel MapearParaPedido(CarrinhoViewModel carrinho, EnderecoViewModel endereco);
     }
 
@@ -121,13 +121,13 @@ namespace NSE.WebApp.MVC.Services
             return await DeserializarObjetoResponse<PedidoViewModel>(response);
         }
 
-        public async Task<IEnumerable<PedidoViewModel>> ObterListaPorClienteId()
+        public async Task<PagedViewModel<PedidoViewModel>> ObterListaPorClienteId(int pageSize, int pageIndex)
         {
-            var response = await _httpClient.GetAsync("/compras/pedido/lista-cliente");
+            var response = await _httpClient.GetAsync($"/compras/pedido/lista-cliente?ps={pageSize}&page={pageIndex}");
 
             TratarErrosResponse(response);
 
-            return await DeserializarObjetoResponse<IEnumerable<PedidoViewModel>>(response);
+            return await DeserializarObjetoResponse<PagedViewModel<PedidoViewModel>>(response);
         }
 
         public PedidoTransacaoViewModel MapearParaPedido(CarrinhoViewModel carrinho, EnderecoViewModel endereco)

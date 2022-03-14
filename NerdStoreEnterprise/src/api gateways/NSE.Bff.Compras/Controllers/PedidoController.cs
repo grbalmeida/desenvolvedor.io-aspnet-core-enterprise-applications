@@ -60,9 +60,9 @@ namespace NSE.Bff.Compras.Controllers
         }
     
         [HttpGet("compras/pedido/lista-cliente")]
-        public async Task<IActionResult> ListaPorCliente()
+        public async Task<IActionResult> ListaPorCliente([FromQuery] int ps = 8, [FromQuery] int page = 1)
         {
-            var pedidos = await _pedidoService.ObterListaPorClienteId();
+            var pedidos = await _pedidoService.ObterListaPorClienteId(ps, page);
 
             return pedidos == null ? NotFound() : CustomResponse(pedidos);
         }
